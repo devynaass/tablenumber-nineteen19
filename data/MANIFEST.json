@@ -1,5 +1,0 @@
-{
-  "sumber": "https://github.com/sains-data/capstone-dl-2026-starter",
-  "berkas": ["data/latih.csv"],
-  "catatan": "Isi pada Sprint 0: versi/tanggal unduh, jumlah baris, dan perubahan (bila ada). Berkas data sendiri tidak di-commit."
-}
