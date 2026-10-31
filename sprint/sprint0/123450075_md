@@ -1,0 +1,19 @@
+# Sprint 0 - 123450075
+
+*Jalur:* Transfer Learning / Fine-tuning (Modul 06)  
+*Tugas sampingan:* Penyediaan Borang Analisis Perbandingan Prestasi Model  
+
+## Selesai
+- Melengkapkan Kontrak Tim dan mengaitkan akaun GitHub ke Papan Tim
+- Membuat cawangan (branch) `123450075/kerja` dari repositori templat pasukan
+- Push pertama
+- Menguji kod pemula (starter code) daripada pensyarah secara tempatan
+
+## Berikutnya
+- Menunggu integrasi pipeline data baku dari cawangan `main`
+- Mula membina dan mengeksperimentasi model Transfer Learning / Fine-tuning (Modul 06)
+- Menyediakan perangkaan borang analisis perbandingan prestasi bagi semua model pasukan
+
+## Hambatan
+- Model Transfer Learning belum dapat dilatih menggunakan dataset projek kerana pipeline data dan fail `MANIFEST.json` masih dalam proses pengisian oleh pasukan
+- Muat turun berat (weights) pretrained model sempat terhenti akibat talian internet yang perlahan
