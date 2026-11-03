@@ -1,0 +1,68 @@
+# Rencana eksperimen tim 19: Deteksi dan hitung objek di meja
+# Label: Desain: susunan objek yang ditaruh operator
+tim: 19
+judul: Deteksi dan hitung objek di meja
+pembimbing: Ade Lailani
+pilar: Citra
+seed: 1019
+ulangan: 2
+durasi_kondisi_detik: 4
+jeda_detik: 1
+rekam:
+  audio:
+    aktif: false
+  kamera:
+    aktif: true
+    interval_detik: 0.5
+    lebar: 1280
+    tinggi: 720
+faktor:
+  susunan:
+    jenis: manual
+    taraf:
+      - 'S01: kunci, gunting'
+      - 'S02: buku, botol, ponsel, 2 gunting, 2 spidol'
+      - 'S03: ponsel, 2 gelas, buku, 2 gunting'
+      - 'S04: gelas, kotak pensil, kunci, spidol'
+      - 'S05: kunci, gunting'
+      - 'S06: buku, kunci, botol'
+      - 'S07: ponsel, botol'
+      - 'S08: buku, 2 gunting, spidol'
+      - 'S09: 2 spidol, gelas, kotak pensil'
+      - 'S10: spidol, 2 buku, gelas, botol, kunci'
+      - 'S11: kunci'
+      - 'S12: spidol, ponsel, kunci'
+      - 'S13: gunting, botol, spidol, kunci'
+      - 'S14: kunci'
+      - 'S15: ponsel'
+      - 'S16: botol, gelas, 2 kotak pensil, kunci, spidol'
+      - 'S17: gelas, kotak pensil, spidol, gunting'
+      - 'S18: 2 spidol, gelas, gunting, botol, ponsel'
+      - 'S19: gelas, spidol, buku, kotak pensil'
+      - 'S20: kunci'
+      - 'S21: 2 gunting, kotak pensil, buku, 2 ponsel'
+      - 'S22: botol, gunting'
+      - 'S23: buku'
+      - 'S24: gelas, botol, 2 spidol'
+      - 'S25: gelas, kunci, 2 buku, 2 gunting, 2 ponsel'
+      - 'S26: botol, 2 spidol, ponsel'
+      - 'S27: 2 ponsel, buku'
+      - 'S28: ponsel, kunci, botol, buku'
+      - 'S29: kotak pensil'
+      - 'S30: buku, kotak pensil, gunting, botol, gelas'
+    instruksi: 'Letakkan di area objek: {taraf}'
+  lampu:
+    - 0
+    - 255
+metode:
+  jenis_tugas: Regresi jumlah per kelas (8 kelas)
+  masukan_model: Citra 224×224
+  metrik_utama: MAE per kelas, ketepatan susunan
+  jalur:
+    - CNN
+    - TL
+    - RNN
+    - Transformer
+    - AE
+  pembanding_non_dl: Histogram warna + HOG + Random Forest
+  catatan_metode: Bukan deteksi kotak (terlalu berat); RNN = CNN-LSTM atas potongan citra
