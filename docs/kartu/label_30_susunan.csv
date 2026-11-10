@@ -1,0 +1,31 @@
+susunan,deskripsi,buku,botol,ponsel,gunting,spidol,gelas,kotak pensil,kunci,total_objek
+S01,"kunci, gunting",0,0,0,1,0,0,0,1,2
+S02,"buku, botol, ponsel, 2 gunting, 2 spidol",1,1,1,2,2,0,0,0,7
+S03,"ponsel, 2 gelas, buku, 2 gunting",1,0,1,2,0,2,0,0,6
+S04,"gelas, kotak pensil, kunci, spidol",0,0,0,0,1,1,1,1,4
+S05,"kunci, gunting",0,0,0,1,0,0,0,1,2
+S06,"buku, kunci, botol",1,1,0,0,0,0,0,1,3
+S07,"ponsel, botol",0,1,1,0,0,0,0,0,2
+S08,"buku, 2 gunting, spidol",1,0,0,2,1,0,0,0,4
+S09,"2 spidol, gelas, kotak pensil",0,0,0,0,2,1,1,0,4
+S10,"spidol, 2 buku, gelas, botol, kunci",2,1,0,0,1,1,0,1,6
+S11,kunci,0,0,0,0,0,0,0,1,1
+S12,"spidol, ponsel, kunci",0,0,1,0,1,0,0,1,3
+S13,"gunting, botol, spidol, kunci",0,1,0,1,1,0,0,1,4
+S14,kunci,0,0,0,0,0,0,0,1,1
+S15,ponsel,0,0,1,0,0,0,0,0,1
+S16,"botol, gelas, 2 kotak pensil, kunci, spidol",0,1,0,0,1,1,2,1,6
+S17,"gelas, kotak pensil, spidol, gunting",0,0,0,1,1,1,1,0,4
+S18,"2 spidol, gelas, gunting, botol, ponsel",0,1,1,1,2,1,0,0,6
+S19,"gelas, spidol, buku, kotak pensil",1,0,0,0,1,1,1,0,4
+S20,kunci,0,0,0,0,0,0,0,1,1
+S21,"2 gunting, kotak pensil, buku, 2 ponsel",1,0,2,2,0,0,1,0,6
+S22,"botol, gunting",0,1,0,1,0,0,0,0,2
+S23,buku,1,0,0,0,0,0,0,0,1
+S24,"gelas, botol, 2 spidol",0,1,0,0,2,1,0,0,4
+S25,"gelas, kunci, 2 buku, 2 gunting, 2 ponsel",2,0,2,2,0,1,0,1,8
+S26,"botol, 2 spidol, ponsel",0,1,1,0,2,0,0,0,4
+S27,"2 ponsel, buku",1,0,2,0,0,0,0,0,3
+S28,"ponsel, kunci, botol, buku",1,1,1,0,0,0,0,1,4
+S29,kotak pensil,0,0,0,0,0,0,1,0,1
+S30,"buku, kotak pensil, gunting, botol, gelas",1,1,0,1,0,1,1,0,5

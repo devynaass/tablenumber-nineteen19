@@ -1,0 +1,30 @@
+{
+  "tim": 19,
+  "judul": "Deteksi dan hitung objek di meja",
+  "total_kondisi": 120,
+  "total_susunan": 30,
+  "kelas_objek": [
+    "buku",
+    "botol",
+    "ponsel",
+    "gunting",
+    "spidol",
+    "gelas",
+    "kotak pensil",
+    "kunci"
+  ],
+  "faktor": {
+    "lampu": [
+      0,
+      255
+    ],
+    "ulangan": 2
+  },
+  "kamera": {
+    "aktif": true,
+    "interval_detik": 0.5,
+    "lebar": 1280,
+    "tinggi": 720
+  },
+  "file_label": "label.csv"
+}
