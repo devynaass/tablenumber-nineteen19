@@ -1,69 +1,158 @@
-"""Kerangka run.py anggota. Salin folder ini menjadi models/<nim>/ lalu isi bagian MODEL.
+"""Jalur CNN dari nol (Modul 05) - Tim 19: hitung objek di meja (regresi 8 kelas).
 
-    python models/<nim>/run.py --seed 1 [--final]
+Jalankan dari akar repo:
+    python models/123450007/run.py --seed 1
+
+Kerangka ini belum diuji (belum dijalankan di laptop). Titik yang perlu disesuaikan
+ditandai "SESUAIKAN".
 """
 from __future__ import annotations
 
 import argparse
-import subprocess
-import sys
-import time
-from pathlib import Path
+import random
 
 import numpy as np
+import torch
+from torch import nn
 
-AKAR = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(AKAR))
-from src.protokol import data  # noqa: E402  (protokol tim yang dibekukan)
-
-NIM = Path(__file__).resolve().parent.name     # nama folder = NIM
-JALUR = "cnn"                                   # cnn | tl | rnn | trf | ae
+JUMLAH_KELAS = 8  # buku, botol, ponsel, gunting, spidol, gelas, kotak pensil, kunci
 
 
-def latih_dan_prediksi(seed: int, final: bool) -> tuple[np.ndarray, np.ndarray | None]:
-    """Kembalikan (pred_val, pred_test|None). Ganti isi fungsi ini dengan model Anda."""
-    import torch
+# ----------------------------------------------------------------------------- data
+def data_dummy(n: int = 60):
+    """Dipakai hanya bila muat() belum diisi. Bentuk sama dengan data meja."""
+    rng = np.random.default_rng(0)
+    X = rng.random((n, 3, 224, 224), dtype=np.float32)
+    y = rng.integers(0, 3, size=(n, JUMLAH_KELAS)).astype(np.float32)
+    a, b = int(n * 0.6), int(n * 0.8)
+    return X[:a], y[:a], X[a:b], y[a:b], X[b:], y[b:]
 
-    torch.manual_seed(seed)
+
+def ambil_data():
+    try:
+        from src.protokol.data import muat
+
+        return muat(), False
+    except NotImplementedError:
+        print("PERINGATAN: src/protokol/data.py belum diisi. Memakai data DUMMY, "
+              "hasilnya hanya untuk memastikan kode berjalan.")
+        return data_dummy(), True
+
+
+def ke_nchw(X: np.ndarray) -> np.ndarray:
+    """Pastikan bentuk [N, C, 224, 224] bertipe float32."""
+    X = np.asarray(X, dtype=np.float32)
+    if X.ndim == 3:                      # [N, H, W] -> tambah kanal
+        X = X[:, None, :, :]
+    elif X.ndim == 4 and X.shape[-1] in (1, 3) and X.shape[1] not in (1, 3):
+        X = np.transpose(X, (0, 3, 1, 2))  # [N, H, W, C] -> [N, C, H, W]
+    return X
+
+
+# ----------------------------------------------------------------------------- model
+def blok(masuk: int, keluar: int) -> nn.Sequential:
+    return nn.Sequential(
+        nn.Conv2d(masuk, keluar, kernel_size=3, padding=1),
+        nn.BatchNorm2d(keluar),
+        nn.ReLU(inplace=True),
+        nn.MaxPool2d(2),
+    )
+
+
+class CNNHitung(nn.Module):
+    """Masukan [N, C, 224, 224] -> keluaran [N, 8] (jumlah per kelas, tanpa softmax)."""
+
+    def __init__(self, kanal: int = 3):
+        super().__init__()
+        self.fitur = nn.Sequential(blok(kanal, 16), blok(16, 32), blok(32, 64), blok(64, 128))
+        self.rata = nn.AdaptiveAvgPool2d(1)
+        self.kepala = nn.Linear(128, JUMLAH_KELAS)
+
+    def forward(self, x):
+        x = self.rata(self.fitur(x)).flatten(1)
+        return self.kepala(x)
+
+
+# ----------------------------------------------------------------------------- latih
+def set_seed(seed: int):
+    random.seed(seed)
     np.random.seed(seed)
-    Xtr, ytr, Xva, _, Xte, _ = data.muat()
-    # ---- MODEL (contoh minimal; ganti dengan arsitektur jalur Anda) ----
-    def ke_tensor(X):
-        return torch.tensor(np.asarray(X, dtype=np.float32)).reshape(len(X), -1)
-    X, y = ke_tensor(Xtr), torch.tensor(np.asarray(ytr))
-    model = torch.nn.Sequential(torch.nn.Linear(X.shape[1], 10))
-    opt = torch.optim.SGD(model.parameters(), lr=0.01)       # tulis alasan pilihan optimizer di catatan.md
-    for _ in range(2):
-        for i in range(0, len(X), 128):
+    torch.manual_seed(seed)
+
+
+def batch(X, y, ukuran, acak):
+    idx = np.random.permutation(len(X)) if acak else np.arange(len(X))
+    for i in range(0, len(X), ukuran):
+        j = idx[i:i + ukuran]
+        yield torch.from_numpy(X[j]), torch.from_numpy(y[j])
+
+
+@torch.no_grad()
+def prediksi(model, X, ukuran=16):
+    model.eval()
+    return np.concatenate([model(xb).numpy() for xb, _ in batch(X, np.zeros((len(X), JUMLAH_KELAS), np.float32), ukuran, False)])
+
+
+def latih(model, X, y, epoch, lr=1e-3, ukuran=16):
+    opt = torch.optim.Adam(model.parameters(), lr=lr)
+    loss_fn = nn.SmoothL1Loss()
+    for e in range(epoch):
+        model.train()
+        total = 0.0
+        for xb, yb in batch(X, y, ukuran, True):
             opt.zero_grad()
-            loss = torch.nn.functional.cross_entropy(model(X[i:i + 128]), y[i:i + 128])
+            loss = loss_fn(model(xb), yb)
             loss.backward()
             opt.step()
-    model.eval()
-    with torch.no_grad():
-        pred_val = model(ke_tensor(Xva)).argmax(1).numpy()
-        pred_test = model(ke_tensor(Xte)).argmax(1).numpy() if final and Xte is not None else None
-    return pred_val, pred_test
+            total += loss.item() * len(xb)
+        print(f"epoch {e + 1}/{epoch}  loss {total / len(X):.4f}")
 
 
-def main() -> None:
+# ----------------------------------------------------------------------------- hasil
+def ringkas(y_benar, y_pred):
+    """MAE per kelas dan ketepatan susunan (semua 8 hitungan benar setelah dibulatkan)."""
+    mae_kelas = np.abs(y_pred - y_benar).mean(axis=0)
+    tepat = float((np.rint(y_pred).clip(0) == y_benar).all(axis=1).mean())
+    return mae_kelas, tepat
+
+
+def serahkan_ke_evaluate(model, y_benar, y_pred, seed):
+    """SESUAIKAN: tulis berkas hasil lewat src.common.evaluate.
+
+    Buka src/common/evaluate.py, lihat nama fungsi dan argumennya, lalu panggil di sini
+    (biasanya metrics.json: MAE per kelas, ketepatan susunan, ukuran ONNX, latensi).
+    """
+    from src.common import evaluate  # noqa: F401
+
+    raise NotImplementedError("Isi pemanggilan evaluate sesuai antarmuka di src/common/evaluate.py")
+
+
+def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--seed", type=int, required=True)
-    ap.add_argument("--final", action="store_true", help="sprint terakhir: evaluasi data uji sekali")
-    ap.add_argument("--perangkat", default="cpu laptop")
+    ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--epoch", type=int, default=2)
     a = ap.parse_args()
-    t0 = time.time()
-    pred_val, pred_test = latih_dan_prediksi(a.seed, a.final)
-    durasi = time.time() - t0
-    out = AKAR / "results" / NIM
-    out.mkdir(parents=True, exist_ok=True)
-    np.save(out / "pred_val.npy", np.asarray(pred_val))
-    perintah = [sys.executable, "-m", "src.common.evaluate", "--nim", NIM, "--model", JALUR, "--seed", str(a.seed),
-                "--pred-val", str(out / "pred_val.npy"), "--durasi", f"{durasi:.1f}", "--perangkat", a.perangkat]
-    if pred_test is not None:
-        np.save(out / "pred_test.npy", np.asarray(pred_test))
-        perintah += ["--pred-test", str(out / "pred_test.npy")]
-    subprocess.run(perintah, check=True, cwd=AKAR)
+    set_seed(a.seed)
+
+    (Xtr, ytr, Xva, yva, Xte, yte), dummy = ambil_data()
+    Xtr, Xva = ke_nchw(Xtr), ke_nchw(Xva)
+    ytr, yva = np.asarray(ytr, np.float32), np.asarray(yva, np.float32)
+    assert Xtr.shape[2:] == (224, 224), f"masukan harus 224x224, dapat {Xtr.shape}"
+    assert ytr.shape[1] == JUMLAH_KELAS, f"y harus [N, 8], dapat {ytr.shape}"
+
+    model = CNNHitung(kanal=Xtr.shape[1])
+    latih(model, Xtr, ytr, a.epoch)
+
+    pred = prediksi(model, Xva)
+    assert pred.shape == yva.shape, (pred.shape, yva.shape)
+    mae_kelas, tepat = ringkas(yva, pred)
+    print("MAE per kelas:", np.round(mae_kelas, 3))
+    print("Ketepatan susunan:", round(tepat, 3))
+
+    if dummy:
+        print("Selesai (data dummy). Hasil tidak ditulis ke metrics.json.")
+        return
+    serahkan_ke_evaluate(model, yva, pred, a.seed)
 
 
 if __name__ == "__main__":
