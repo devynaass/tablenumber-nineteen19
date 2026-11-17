@@ -2,16 +2,16 @@
     "model": "baseline_non_dl_hist_hog_rf",
     "sumber_data": "data_primer",
     "seed": 1,
-    "mae_overall": 0.5631,
+    "mae_overall": 0.3209,
     "mae_per_kelas": [
-        0.5272,
-        0.6286,
-        0.446,
-        0.4388,
-        0.8336,
-        0.5848,
-        0.6511,
-        0.3947
+        0.2222,
+        0.1159,
+        0.2948,
+        0.4589,
+        0.3288,
+        0.515,
+        0.3074,
+        0.3243
     ],
-    "ketepatan_susunan": 0.0083
+    "ketepatan_susunan": 0.2292
 }
