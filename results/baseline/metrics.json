@@ -1,17 +1,17 @@
 {
     "model": "baseline_non_dl_hist_hog_rf",
-    "sumber_data": "simulasi",
+    "sumber_data": "data_primer",
     "seed": 1,
-    "mae_overall": 0.448,
+    "mae_overall": 0.5631,
     "mae_per_kelas": [
-        0.4407,
-        0.5137,
-        0.4203,
-        0.419,
-        0.4967,
-        0.3627,
-        0.4087,
-        0.522
+        0.5272,
+        0.6286,
+        0.446,
+        0.4388,
+        0.8336,
+        0.5848,
+        0.6511,
+        0.3947
     ],
-    "ketepatan_susunan": 0.0333
+    "ketepatan_susunan": 0.0083
 }
