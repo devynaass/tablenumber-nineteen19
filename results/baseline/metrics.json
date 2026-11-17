@@ -1,13 +1,17 @@
 {
-  "metrik": {
-    "val_acc": 0.842333,
-    "val_macro_f1": 0.841142
-  },
-  "seed": 2026,
-  "data_hash": "42d7ac7f6bd298d04c19a58de0bb6a97",
-  "perangkat": "cpu laptop",
-  "model": "baseline",
-  "n_val": 6000,
-  "n_test": 0,
-  "durasi_detik": 1.8
+    "model": "baseline_non_dl_hist_hog_rf",
+    "sumber_data": "data_primer",
+    "seed": 1,
+    "mae_overall": 0.5631,
+    "mae_per_kelas": [
+        0.5272,
+        0.6286,
+        0.446,
+        0.4388,
+        0.8336,
+        0.5848,
+        0.6511,
+        0.3947
+    ],
+    "ketepatan_susunan": 0.0083
 }
