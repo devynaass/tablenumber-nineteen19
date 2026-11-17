@@ -44,7 +44,7 @@ PORSI_VAL = 0.2  # 20 susunan non-uji -> 4 susunan validasi, 16 susunan latih
 # Koordinat crop area A3 pada citra 1280x720: (kiri, atas, kanan, bawah) dalam piksel.
 # Ambil dari satu citra asli: buka di Paint, arahkan kursor ke sudut-sudut kertas A3,
 # baca koordinat piksel di pojok kiri bawah jendela Paint.
-CROP_A3: tuple[int, int, int, int] | None = None
+CROP_A3: tuple[int, int, int, int] | None = (173, 116, 611, 355)
 
 # Susunan yang ditata berbeda dari rencana (lihat data/CATATAN-SESI.md).
 # Nilai di sini menimpa jumlah dari rencana.
