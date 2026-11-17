@@ -201,7 +201,7 @@ def main() -> None:
     ap.add_argument("--wd", type=float, default=1e-4)
     ap.add_argument("--lebar", type=int, default=32, help="jumlah filter blok pertama")
     ap.add_argument("--dropout", type=float, default=0.3)
-    ap.add_argument("--loss", choices=["l1", "mse"], default="mse")
+    ap.add_argument("--loss", choices=["l1", "mse"], default="l1")
     ap.add_argument("--tanpa-aug", action="store_true")
     ap.add_argument("--geser", type=int, default=8, help="geser acak maksimum (piksel)")
     ap.add_argument("--sabar", type=int, default=15, help="epoch tanpa perbaikan sebelum berhenti dini")
