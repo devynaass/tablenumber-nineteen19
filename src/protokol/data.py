@@ -160,3 +160,5 @@ def muat():
     m_val = np.isin(grup, susunan_val)
     m_uji = np.isin(grup, susunan_uji)
     return X[m_latih], y[m_latih], X[m_val], y[m_val], X[m_uji], y[m_uji]
+
+    #data.py
