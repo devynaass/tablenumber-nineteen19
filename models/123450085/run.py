@@ -1,139 +1,157 @@
-"""models/123450085/run.py
+"""models/123450085/run.py  –  CNN-LSTM (Jalur RNN), Sprint 1.
 
-Skrip eksekusi pelatihan dan evaluasi model CNN-LSTM (Jalur RNN).
+    python models/123450085/run.py --seed 1
 """
 
+from __future__ import annotations
+
 import argparse
-import json
 import os
+import subprocess
 import sys
 import time
+
 import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 
-# Pastikan folder model bisa diimpor
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(CURRENT_DIR)
-from model import CNNLSTM
+# ── Path setup ────────────────────────────────────────────────────────────────
+AKAR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.insert(0, AKAR)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from model import CNNLSTM                       # model.py kamu (tidak diubah)
+from src.protokol import data as protokol_data  # protokol tim (dibekukan)
+
+# ── Konstanta ─────────────────────────────────────────────────────────────────
+NIM     = "123450085"
+JALUR   = "rnn"
+N_KELAS = 8      # jumlah kelas objek (sesuai KELAS_OBJEK di data.py)
+UKURAN  = 224    # resolusi input model
 
 
-def muat_dataset():
-    """Memuat data dari data/simulasi yang sudah disiapkan."""
-    sim_dir = "data/simulasi"
-    if not os.path.exists(os.path.join(sim_dir, "X_train.npy")):
-        raise FileNotFoundError(
-            "Data simulasi belum ada! Jalankan 'python src/simulasi_data.py' terlebih dahulu."
+def ke_tensor_X(X: np.ndarray, batch: int = 32) -> torch.Tensor:
+    """Pastikan array X jadi (N, C, 224, 224) float32 dalam [0,1]."""
+    t = torch.as_tensor(np.asarray(X, dtype=np.float32))
+
+    # Normalkan dimensi jika belum (N,C,H,W)
+    if t.ndim == 2:
+        s = int(round(t.shape[1] ** 0.5))
+        t = t.reshape(len(t), 1, s, s)
+    elif t.ndim == 3:
+        t = t.unsqueeze(1)
+    elif t.ndim == 4 and t.shape[-1] in (1, 3) and t.shape[1] not in (1, 3):
+        t = t.permute(0, 3, 1, 2)   # (N,H,W,C) -> (N,C,H,W)
+
+    if t.max() > 1.5:
+        t = t / 255.0
+
+    if t.shape[-2] != UKURAN or t.shape[-1] != UKURAN:
+        t = torch.nn.functional.interpolate(
+            t, size=(UKURAN, UKURAN), mode="bilinear", align_corners=False
         )
-
-    X_tr = np.load(os.path.join(sim_dir, "X_train.npy"))
-    y_tr = np.load(os.path.join(sim_dir, "y_train.npy"))
-    X_va = np.load(os.path.join(sim_dir, "X_val.npy"))
-    y_va = np.load(os.path.join(sim_dir, "y_val.npy"))
-    return X_tr, y_tr, X_va, y_va
+    return t
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--seed", type=int, default=1)
-    parser.add_argument("--epochs", type=int, default=3)
-    parser.add_argument("--batch-size", type=int, default=8)
-    parser.add_argument("--lr", type=float, default=0.001)
-    args = parser.parse_args()
+def main() -> None:
+    ap = argparse.ArgumentParser(description="CNN-LSTM Jalur RNN – Sprint 1")
+    ap.add_argument("--seed",       type=int,   default=1)
+    ap.add_argument("--epochs",     type=int,   default=5)
+    ap.add_argument("--batch-size", type=int,   default=8)
+    ap.add_argument("--lr",         type=float, default=1e-3)
+    ap.add_argument("--perangkat",  default="cpu laptop")
+    a = ap.parse_args()
 
-    # 1. Pasang Seed untuk reproduktibilitas
-    torch.manual_seed(args.seed)
-    np.random.seed(args.seed)
+    # 1. Seed ──────────────────────────────────────────────────────────────────
+    torch.manual_seed(a.seed)
+    np.random.seed(a.seed)
 
-    print("=" * 55)
-    print("   MEMULAI RUN PIPELINE CNN-LSTM (JALUR RNN)    ")
-    print("=" * 55)
+    print("=" * 60)
+    print("   CNN-LSTM (JALUR RNN) – Sprint 1 – Seed", a.seed)
+    print("=" * 60)
 
-    # 2. Muat Data
-    X_tr, y_tr, X_va, y_va = muat_dataset()
-    print(f"Data Latih     : X = {X_tr.shape}, y = {y_tr.shape}")
-    print(f"Data Validasi  : X = {X_va.shape}, y = {y_va.shape}")
+    # 2. Muat data primer via protokol tim ────────────────────────────────────
+    print("[1/4] Memuat data via src.protokol.data.muat() ...")
+    X_tr_raw, y_tr_raw, X_va_raw, y_va_raw, _, _ = protokol_data.muat()
+
+    X_tr = np.asarray(X_tr_raw, dtype=np.float32)
+    y_tr = np.asarray(y_tr_raw, dtype=np.float32)   # (N, 8) regresi
+    X_va = np.asarray(X_va_raw, dtype=np.float32)
+    y_va = np.asarray(y_va_raw, dtype=np.float32)
+
+    print(f"   Train : X={X_tr.shape}  y={y_tr.shape}")
+    print(f"   Val   : X={X_va.shape}  y={y_va.shape}")
+
+    X_tr_t = ke_tensor_X(X_tr)
+    X_va_t = ke_tensor_X(X_va)
+    y_tr_t = torch.as_tensor(y_tr)   # (N, 8) float
 
     train_loader = DataLoader(
-        TensorDataset(torch.tensor(X_tr), torch.tensor(y_tr)),
-        batch_size=args.batch_size,
+        TensorDataset(X_tr_t, y_tr_t),
+        batch_size=a.batch_size,
         shuffle=True,
     )
-    val_loader = DataLoader(
-        TensorDataset(torch.tensor(X_va), torch.tensor(y_va)),
-        batch_size=args.batch_size,
-        shuffle=False,
-    )
 
-    # 3. Inisialisasi Model
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    num_classes = int(max(y_tr.max(), y_va.max())) + 1
-    model = CNNLSTM(num_classes=num_classes).to(device)
-    criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    # 3. Inisialisasi model ───────────────────────────────────────────────────
+    device  = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # CNNLSTM dari model.py kamu – outputnya N_KELAS = 8 (regresi)
+    model   = CNNLSTM(num_classes=N_KELAS).to(device)
+    crit    = nn.MSELoss()   # tugas REGRESI: MSE, bukan CrossEntropy
+    opt     = torch.optim.Adam(model.parameters(), lr=a.lr)
 
-    # 4. Pelatihan
-    print(
-        f"\nMelatih model pada {device} ({args.epochs} epoch, seed {args.seed})..."
-    )
-    start_time = time.time()
-    for epoch in range(args.epochs):
+    # 4. Latih ────────────────────────────────────────────────────────────────
+    print(f"\n[2/4] Melatih pada {device}  ({a.epochs} epoch, batch {a.batch_size}) ...")
+    t0 = time.time()
+    for ep in range(a.epochs):
         model.train()
-        total_loss = 0.0
-        for X_batch, y_batch in train_loader:
-            X_batch, y_batch = X_batch.to(device), y_batch.to(device)
-            optimizer.zero_grad()
-            out = model(X_batch)
-            loss = criterion(out, y_batch)
+        total = 0.0
+        for Xb, yb in train_loader:
+            Xb, yb = Xb.to(device), yb.to(device)
+            opt.zero_grad()
+            loss = crit(model(Xb), yb)
             loss.backward()
-            optimizer.step()
-            total_loss += loss.item()
-        print(
-            f" Epoch [{epoch+1}/{args.epochs}] -> Loss: {total_loss/len(train_loader):.4f}"
-        )
+            opt.step()
+            total += loss.item()
+        print(f"   Epoch [{ep+1}/{a.epochs}]  MSE-Loss: {total/len(train_loader):.4f}")
 
-    durasi = time.time() - start_time
-    print(f"Pelatihan selesai dalam {durasi:.2f} detik.")
+    durasi = time.time() - t0
+    print(f"   Selesai dalam {durasi:.1f} detik.")
 
-    # 5. Inferensi Data Validasi
+    # 5. Inferensi validasi ───────────────────────────────────────────────────
+    print("[3/4] Inferensi data validasi ...")
     model.eval()
-    val_preds = []
+    preds = []
     with torch.no_grad():
-        for X_batch, _ in val_loader:
-            X_batch = X_batch.to(device)
-            preds = model(X_batch).argmax(dim=1).cpu().numpy()
-            val_preds.extend(preds)
+        for i in range(0, len(X_va_t), a.batch_size):
+            out = model(X_va_t[i : i + a.batch_size].to(device))
+            preds.append(out.cpu().numpy())
+    p_val = np.clip(np.concatenate(preds), 0, None)   # jumlah ≥ 0
 
-    p_val = np.array(val_preds)
-
-    # 6. Simpan Prediksi Validasi & Metrik
-    out_dir = "results/123450085"
+    # 6. Simpan pred_val.npy & panggil evaluate resmi tim ────────────────────
+    print("[4/4] Simpan prediksi & panggil src.common.evaluate ...")
+    out_dir   = os.path.join(AKAR, "results", NIM)
     os.makedirs(out_dir, exist_ok=True)
     pred_file = os.path.join(out_dir, "pred_val.npy")
     np.save(pred_file, p_val)
 
-    # Hitung akurasi sederhana
-    acc = float((p_val == y_va).mean())
-    metrics_file = os.path.join(out_dir, "metrics.json")
-    hasil = {
-        "metrik": {"val_acc": round(acc, 4)},
-        "seed": args.seed,
-        "model": "rnn",
-        "durasi_detik": round(durasi, 2),
-        "perangkat": "cpu laptop" if device.type == "cpu" else "cuda gpu",
-        "n_val": len(y_va),
-    }
-    with open(metrics_file, "w") as f:
-        json.dump(hasil, f, indent=2)
+    subprocess.run(
+        [
+            sys.executable, "-m", "src.common.evaluate",
+            "--nim",       NIM,
+            "--model",     JALUR,
+            "--seed",      str(a.seed),
+            "--pred-val",  pred_file,
+            "--durasi",    f"{durasi:.1f}",
+            "--perangkat", a.perangkat,
+        ],
+        check=True,
+        cwd=AKAR,
+    )
 
-    print("\n" + "=" * 55)
-    print("HASIL EVALUASI PIPELINE:")
-    print(f" - File Prediksi : {pred_file}")
-    print(f" - File Metrik   : {metrics_file}")
-    print(f" - Akurasi Val   : {acc * 100:.2f}%")
-    print("=" * 55)
-    print("STATUS: BERJALAN SAMPAI AKHIR DENGAN SUKSES!")
+    print("\n" + "=" * 60)
+    print("SUKSES! Cek results/123450085/metrics.json")
+    print("=" * 60)
 
 
 if __name__ == "__main__":
