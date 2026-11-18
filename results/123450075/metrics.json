@@ -8,10 +8,10 @@
     "test_r2": -0.073357
   },
   "seed": 1,
-  "data_hash": "366c08fe1dd6031eb728073288512de8",
+  "data_hash": "b83d528dd107253c5709c53f503ad76b",
   "perangkat": "cpu",
   "model": "transfer_learning_resnet18",
   "n_val": 96,
   "n_test": 241,
-  "durasi_detik": 508.52
+  "durasi_detik": 597.71
 }
