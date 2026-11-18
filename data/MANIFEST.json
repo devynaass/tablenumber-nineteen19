@@ -1,5 +1,9 @@
 {
-  "sumber": "https://github.com/sains-data/capstone-dl-2026-starter",
-  "berkas": ["data/latih.csv"],
-  "catatan": "Isi pada Sprint 0: versi/tanggal unduh, jumlah baris, dan perubahan (bila ada). Berkas data sendiri tidak di-commit."
+  "sumber": "Data primer tim 19 (sesi-20261116-165743 & web-20261116-165748-8c1b)",
+  "berkas": [
+    "data/raw/kamera_index.csv",
+    "data/raw/sesi-20261116-165743/label.csv",
+    "data/raw/sesi-20261116-165743/manifest.json"
+  ],
+  "catatan": "Sprint 0: Sesi 2026-11-16, diunduh 17 Nov 2026. Cek kelengkapan 120 kondisi sesuai PROTOKOL.md."
 }
