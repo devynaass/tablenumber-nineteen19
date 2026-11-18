@@ -11,6 +11,7 @@ import math
 import subprocess
 import sys
 from pathlib import Path
+from src.common import manifest, split
 
 AKAR = Path(__file__).resolve().parent
 
@@ -54,10 +55,15 @@ def main() -> None:
     ap.add_argument("--final", action="store_true")
     ap.add_argument("--hanya", nargs="*", default=None)
     ap.add_argument("--tanpa-baseline", action="store_true")
+    ap.add_argument("--gunakan-hasil-ada", action="store_true")
     a = ap.parse_args()
 
     if not a.seeds:
         ap.error("Minimal satu seed harus diberikan.")
+        
+    hash_acuan = manifest.data_hash(
+        f"split:{split.SEED_SPLIT}".encode()
+)
 
     if not a.tanpa_baseline:
         jalankan([
@@ -85,7 +91,10 @@ def main() -> None:
             if a.final and seed == a.seeds[-1]:
                 perintah.append("--final")
 
-            jalankan(perintah)
+            if a.gunakan_hasil_ada:
+                print(f"[PAKAI HASIL ADA] {model.name}, seed {seed}")
+            else:
+                jalankan(perintah)
 
             path = AKAR / "results" / model.name / "metrics.json"
             hasil = baca_metrics(path)
@@ -106,6 +115,11 @@ def main() -> None:
         hasil = baca_metrics(path)
         if hasil:
             mt = hasil["metrik"]
+            status = (
+            "valid"
+        if hasil.get("data_hash") == hash_acuan
+            else "hash tidak cocok"
+)
             baris.append(
                 f"| baseline | {hasil.get('model', 'baseline')} "
                 f"| {hasil.get('seed', '—')} "
@@ -115,7 +129,7 @@ def main() -> None:
                 f"| {angka(mt.get('test_rmse'))} "
                 f"| {angka(mt.get('test_mae'))} "
                 f"| {angka(mt.get('test_r2'))} "
-                f"| {hasil.get('durasi_detik', 0):.1f} | valid |"
+                f"| {hasil.get('durasi_detik', 0):.1f} |  {status} |"
             )
         else:
             baris.append(
@@ -125,6 +139,12 @@ def main() -> None:
     for nim, daftar in ringkas.items():
         for hasil in daftar:
             mt = hasil["metrik"]
+
+            status = (
+                "valid"
+                if hasil.get("data_hash") == hash_acuan
+                else "hash tidak cocok"
+            )
             baris.append(
                 f"| {nim} | {hasil.get('model', '—')} "
                 f"| {hasil.get('seed', '—')} "
@@ -134,7 +154,7 @@ def main() -> None:
                 f"| {angka(mt.get('test_rmse'))} "
                 f"| {angka(mt.get('test_mae'))} "
                 f"| {angka(mt.get('test_r2'))} "
-                f"| {hasil.get('durasi_detik', 0):.1f} | valid |"
+                f"| {hasil.get('durasi_detik', 0):.1f} | {status} |"
             )
 
     (AKAR / "reports").mkdir(exist_ok=True)
