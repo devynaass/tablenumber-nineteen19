@@ -1,125 +1,227 @@
-"""run.py jalur Transformer (patch ViT kecil). Salin ke models/<nim>/run.py.
-
-    python models/<nim>/run.py --seed 1 [--final]
-"""
-from __future__ import annotations
 
 import argparse
+import json
+import random
 import subprocess
 import sys
 import time
 from pathlib import Path
 
 import numpy as np
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
 
 AKAR = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(AKAR))
-from src.protokol import data  # noqa: E402  (protokol tim yang dibekukan)
 
-NIM = Path(__file__).resolve().parent.name     # nama folder = NIM
-JALUR = "trf"                                   # cnn | tl | rnn | trf | ae
+from src.protokol import data
 
-UKURAN = 224    # masukan model tim: citra 224x224
-PATCH = 16      # 224/16 = 14 -> 14x14 = 196 patch
-DIM = 64
-BATCH = 32
-EPOCH = 2
+NIM = Path(__file__).resolve().parent.name
+MODEL = "trf"
+JUMLAH_OUTPUT = 8
 
 
-def ke_nchw(X, torch):
-    """Ubah batch data apa pun jadi tensor (B, C, H, W) float 0..1, lalu ke UKURAN x UKURAN."""
-    t = torch.as_tensor(np.asarray(X, dtype=np.float32))
-    if t.ndim == 2:                                   # data datar (N, H*W)
-        s = int(round(t.shape[1] ** 0.5))
-        if s * s != t.shape[1]:
-            raise ValueError(f"Tidak bisa menebak bentuk citra dari {tuple(t.shape)}")
-        t = t.reshape(len(t), 1, s, s)
-    elif t.ndim == 3:                                 # (N, H, W)
-        t = t.unsqueeze(1)
-    elif t.ndim == 4 and t.shape[-1] in (1, 3) and t.shape[1] not in (1, 3):
-        t = t.permute(0, 3, 1, 2)                     # (N, H, W, C) -> (N, C, H, W)
-    if t.max() > 1.5:                                 # skala 0..255 -> 0..1
-        t = t / 255.0
-    if t.shape[-1] != UKURAN or t.shape[-2] != UKURAN:
-        t = torch.nn.functional.interpolate(t, size=(UKURAN, UKURAN), mode="bilinear", align_corners=False)
-    return t
-
-
-def buat_model(in_ch: int, n_kelas: int, torch):
-    nn = torch.nn
-
-    class PatchTransformer(nn.Module):
-        def __init__(self):
-            super().__init__()
-            self.embed = nn.Conv2d(in_ch, DIM, PATCH, PATCH)           # potong jadi patch + proyeksi
-            self.pos = nn.Parameter(torch.zeros(1, (UKURAN // PATCH) ** 2, DIM))
-            lapis = nn.TransformerEncoderLayer(DIM, 4, DIM * 2, batch_first=True)
-            self.enc = nn.TransformerEncoder(lapis, 2)
-            self.kepala = nn.Linear(DIM, n_kelas)
-
-        def forward(self, x):                                          # (B, C, 224, 224)
-            z = self.embed(x).flatten(2).transpose(1, 2) + self.pos    # (B, 196, DIM)
-            return self.kepala(self.enc(z).mean(1))                    # (B, n_kelas)
-
-    return PatchTransformer()
-
-
-def prediksi(model, X, torch) -> np.ndarray:
-    model.eval()
-    hasil = []
-    with torch.no_grad():
-        for i in range(0, len(X), BATCH):
-            hasil.append(model(ke_nchw(X[i:i + BATCH], torch)).argmax(1).numpy())
-    return np.concatenate(hasil)
-
-
-def latih_dan_prediksi(seed: int, final: bool) -> tuple[np.ndarray, np.ndarray | None]:
-    """Kembalikan (pred_val, pred_test|None)."""
-    import torch
-
-    torch.manual_seed(seed)
+def set_seed(seed):
+    random.seed(seed)
     np.random.seed(seed)
-    Xtr, ytr, Xva, _, Xte, _ = data.muat()
-    ytr = np.asarray(ytr)
-    n_kelas = int(ytr.max()) + 1
-    in_ch = ke_nchw(Xtr[:1], torch).shape[1]
+    torch.manual_seed(seed)
 
-    model = buat_model(in_ch, n_kelas, torch)
-    opt = torch.optim.AdamW(model.parameters(), lr=1e-3)   # tulis alasan pilihan optimizer di catatan.md
-    y = torch.as_tensor(ytr).long()
-    for _ in range(EPOCH):
+
+class PatchTransformer(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.patch_embed = nn.Conv2d(
+            3, 64, kernel_size=16, stride=16
+        )
+
+        self.pos_embed = nn.Parameter(
+            torch.zeros(1, 196, 64)
+        )
+
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=64,
+            nhead=4,
+            dim_feedforward=128,
+            dropout=0.1,
+            batch_first=True,
+            activation="gelu"
+        )
+
+        self.encoder = nn.TransformerEncoder(
+            encoder_layer,
+            num_layers=2
+        )
+
+        self.head = nn.Sequential(
+            nn.LayerNorm(64),
+            nn.Dropout(0.1),
+            nn.Linear(64, JUMLAH_OUTPUT)
+        )
+
+    def forward(self, x):
+        x = self.patch_embed(x)
+        x = x.flatten(2).transpose(1, 2)
+        x = x + self.pos_embed
+        x = self.encoder(x)
+        x = x.mean(dim=1)
+        return self.head(x)
+
+
+def normalisasi(X_train, X_val):
+    mean = X_train.mean(axis=(0, 2, 3), keepdims=True)
+    std = X_train.std(axis=(0, 2, 3), keepdims=True)
+    std = np.maximum(std, 1e-6)
+
+    X_train = (X_train - mean) / std
+    X_val = (X_val - mean) / std
+
+    return (
+        X_train.astype(np.float32),
+        X_val.astype(np.float32)
+    )
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--seed", type=int, default=1)
+    parser.add_argument("--epochs", type=int, default=2)
+    parser.add_argument(
+        "--perangkat", type=str, default="cpu laptop"
+    )
+    args = parser.parse_args()
+
+    set_seed(args.seed)
+    torch.set_num_threads(4)
+
+    device = torch.device("cpu")
+
+    print("Memuat dataset...")
+    X_train, y_train, X_val, y_val, _, _ = data.muat()
+
+    X_train = np.asarray(X_train, dtype=np.float32)
+    X_val = np.asarray(X_val, dtype=np.float32)
+    y_train = np.asarray(y_train, dtype=np.float32)
+    y_val = np.asarray(y_val, dtype=np.float32)
+
+    X_train, X_val = normalisasi(X_train, X_val)
+
+    print("Train:", X_train.shape, y_train.shape)
+    print("Validasi:", X_val.shape, y_val.shape)
+
+    train_dataset = TensorDataset(
+        torch.from_numpy(X_train),
+        torch.from_numpy(y_train)
+    )
+
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=32,
+        shuffle=True
+    )
+
+    model = PatchTransformer().to(device)
+
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=1e-3,
+        weight_decay=1e-4
+    )
+
+    criterion = nn.MSELoss()
+
+    mulai = time.time()
+
+    for epoch in range(args.epochs):
         model.train()
-        urutan = np.random.permutation(len(Xtr))
-        for i in range(0, len(urutan), BATCH):
-            idx = urutan[i:i + BATCH]
-            opt.zero_grad()
-            loss = torch.nn.functional.cross_entropy(model(ke_nchw(np.asarray(Xtr)[idx], torch)), y[idx])
+        total_loss = 0.0
+
+        for xb, yb in train_loader:
+            xb = xb.to(device)
+            yb = yb.to(device)
+
+            optimizer.zero_grad()
+
+            pred = model(xb)
+            loss = criterion(pred, yb)
+
             loss.backward()
-            opt.step()
+            optimizer.step()
 
-    pred_val = prediksi(model, Xva, torch)
-    pred_test = prediksi(model, Xte, torch) if final and Xte is not None else None
-    return pred_val, pred_test
+            total_loss += loss.item() * xb.size(0)
 
+        rata_loss = total_loss / len(train_dataset)
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--seed", type=int, required=True)
-    ap.add_argument("--final", action="store_true", help="sprint terakhir: evaluasi data uji sekali")
-    ap.add_argument("--perangkat", default="cpu laptop")
-    a = ap.parse_args()
-    t0 = time.time()
-    pred_val, pred_test = latih_dan_prediksi(a.seed, a.final)
-    durasi = time.time() - t0
-    out = AKAR / "results" / NIM
-    out.mkdir(parents=True, exist_ok=True)
-    np.save(out / "pred_val.npy", np.asarray(pred_val))
-    perintah = [sys.executable, "-m", "src.common.evaluate", "--nim", NIM, "--model", JALUR, "--seed", str(a.seed),
-                "--pred-val", str(out / "pred_val.npy"), "--durasi", f"{durasi:.1f}", "--perangkat", a.perangkat]
-    if pred_test is not None:
-        np.save(out / "pred_test.npy", np.asarray(pred_test))
-        perintah += ["--pred-test", str(out / "pred_test.npy")]
-    subprocess.run(perintah, check=True, cwd=AKAR)
+        print(
+            f"Epoch {epoch + 1}/{args.epochs} "
+            f"- Train Loss: {rata_loss:.6f}"
+        )
+
+    model.eval()
+
+    with torch.no_grad():
+        val_tensor = torch.from_numpy(X_val).to(device)
+        pred_val = model(val_tensor).cpu().numpy()
+
+    durasi = time.time() - mulai
+
+    hasil_dir = AKAR / "results" / NIM
+    hasil_dir.mkdir(parents=True, exist_ok=True)
+
+    pred_path = hasil_dir / "pred_val.npy"
+    np.save(pred_path, pred_val)
+
+    mae_per_kelas = np.mean(
+        np.abs(y_val - pred_val),
+        axis=0
+    )
+
+    pred_bulat = np.rint(
+        np.clip(pred_val, 0, None)
+    )
+
+    exact_match = np.mean(
+        np.all(pred_bulat == y_val, axis=1)
+    )
+
+    detail = {
+        "mae_per_kelas": {
+            nama: float(nilai)
+            for nama, nilai in zip(
+                data.KELAS_OBJEK,
+                mae_per_kelas
+            )
+        },
+        "exact_match_accuracy": float(exact_match),
+        "jumlah_data_validasi": int(len(y_val)),
+        "seed": args.seed
+    }
+
+    detail_path = hasil_dir / "metrics_detail.json"
+
+    with open(detail_path, "w", encoding="utf-8") as f:
+        json.dump(detail, f, indent=2, ensure_ascii=False)
+
+    perintah = [
+        sys.executable,
+        "-m", "src.common.evaluate",
+        "--nim", NIM,
+        "--model", MODEL,
+        "--seed", str(args.seed),
+        "--pred-val", str(pred_path),
+        "--durasi", str(durasi),
+        "--perangkat", args.perangkat
+    ]
+
+    print("\nMenjalankan evaluator resmi...")
+    subprocess.run(perintah, cwd=AKAR, check=True)
+
+    print("\nTraining selesai.")
+    print("Durasi:", round(durasi, 2), "detik")
+    print("MAE per kelas:", detail["mae_per_kelas"])
+    print("Exact match:", round(exact_match, 4))
+    print("Hasil:", hasil_dir)
 
 
 if __name__ == "__main__":

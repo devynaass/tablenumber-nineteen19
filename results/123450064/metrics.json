@@ -1,0 +1,14 @@
+{
+  "metrik": {
+    "val_rmse": 0.477275,
+    "val_mae": 0.412023,
+    "val_r2": -0.332904
+  },
+  "seed": 1,
+  "data_hash": "366c08fe1dd6031eb728073288512de8",
+  "perangkat": "cpu",
+  "model": "trf",
+  "n_val": 96,
+  "n_test": 0,
+  "durasi_detik": 8.32233214378357
+}
