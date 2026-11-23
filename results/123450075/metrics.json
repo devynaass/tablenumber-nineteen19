@@ -8,7 +8,7 @@
     "test_r2": -0.073357
   },
   "seed": 1,
-  "data_hash": "b83d528dd107253c5709c53f503ad76b",
+  "data_hash": "366c08fe1dd6031eb728073288512de8",
   "perangkat": "cpu",
   "model": "transfer_learning_resnet18",
   "n_val": 96,
