@@ -1,17 +1,14 @@
 {
-    "model": "baseline_non_dl_hist_hog_rf",
-    "sumber_data": "data_primer",
-    "seed": 1,
-    "mae_overall": 0.3209,
-    "mae_per_kelas": [
-        0.2222,
-        0.1159,
-        0.2948,
-        0.4589,
-        0.3288,
-        0.515,
-        0.3074,
-        0.3243
-    ],
-    "ketepatan_susunan": 0.2292
+  "metrik": {
+    "val_rmse": 0.408669,
+    "val_mae": 0.320898,
+    "val_r2": 0.022751
+  },
+  "seed": 1,
+  "data_hash": "366c08fe1dd6031eb728073288512de8",
+  "perangkat": "cpu laptop",
+  "model": "baseline",
+  "n_val": 96,
+  "n_test": 0,
+  "durasi_detik": 1.5
 }

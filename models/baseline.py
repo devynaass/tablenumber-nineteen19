@@ -109,13 +109,20 @@ def main():
         "ketepatan_susunan": round(exact_match, 4),
     }
 
+    import subprocess, sys
     os.makedirs("results/baseline", exist_ok=True)
-    output_path = "results/baseline/metrics.json"
-    with open(output_path, "w") as f:
-        json.dump(hasil_metrics, f, indent=4)
-
-    print(f"BERHASIL! Hasil data primer disimpan di {output_path}:")
-    print(json.dumps(hasil_metrics, indent=4))
+    np.save("results/baseline/pred_val.npy", y_pred)
+    with open("results/baseline/metrics_detail.json", "w", encoding="utf-8") as f:
+        json.dump(hasil_metrics, f, indent=2)
+    subprocess.run([
+        sys.executable, "-m", "src.common.evaluate",
+        "--nim", "baseline",
+        "--model", "baseline",
+        "--seed", str(args.seed),
+        "--pred-val", "results/baseline/pred_val.npy",
+        "--durasi", "1.5",
+        "--perangkat", "cpu laptop"
+    ], check=True)
 
 
 if __name__ == "__main__":
