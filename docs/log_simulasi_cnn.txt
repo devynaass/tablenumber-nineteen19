@@ -1,0 +1,19 @@
+[cnn] latih (384, 3, 224, 224), val (96, 3, 224, 224), perangkat cpu
+[bentuk] masukan model: (4, 3, 224, 224)  (N, kanal, tinggi, lebar)
+[bentuk] label        : (4, 8)  (N, jumlah per kelas)
+[bentuk] keluaran     : (4, 8)  (N, jumlah per kelas)
+epoch   1  loss 0.5703  val_mae 0.4018  (26 s)
+epoch   2  loss 0.4649  val_mae 0.3280  (53 s)
+{"val_rmse": 0.470706, "val_mae": 0.328023, "val_r2": -0.296467} → results\123450007\metrics.json
+
+MAE validasi per kelas:
+  botol         0.3276
+  gelas         0.0720
+  kotak pensil  0.3013
+  kunci         0.6533
+  spidol        0.3296
+  gunting       0.2891
+  ponsel        0.3439
+  buku          0.3073
+ketepatan susunan (val): 0.0000   epoch terbaik: 2
+
