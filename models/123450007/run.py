@@ -135,6 +135,19 @@ def latih_dan_prediksi(seed: int, final: bool, a: argparse.Namespace):
     gen = torch.Generator().manual_seed(seed)
 
     Xtr_t, ytr_t = torch.from_numpy(Xtr), torch.from_numpy(ytr)
+
+    # ---- log bentuk masukan/keluaran model (permintaan pembimbing, tugas #11) ----
+    model.eval()
+    with torch.no_grad():
+        xs = ((Xtr_t[:4] - rerata) / simpangan).to(perangkat)
+        ys = model(xs)
+    print(f"[bentuk] masukan model: {tuple(xs.shape)}  (N, kanal, tinggi, lebar)", flush=True)
+    print(f"[bentuk] label        : {tuple(ytr_t[:4].shape)}  (N, jumlah per kelas)", flush=True)
+    print(f"[bentuk] keluaran     : {tuple(ys.shape)}  (N, jumlah per kelas)", flush=True)
+    assert ys.shape[1] == ytr_t.shape[1], "keluaran model harus sama dengan jumlah kelas"
+    model.train()
+    # ------------------------------------------------------------------------------
+
     mae_terbaik, bobot_terbaik, epoch_terbaik, sabar = float("inf"), None, 0, 0
     t0 = time.time()
     for ep in range(1, a.epoch + 1):
