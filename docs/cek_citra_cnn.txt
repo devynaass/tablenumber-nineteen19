@@ -1,0 +1,13 @@
+[latih] citra (384, 3, 224, 224) dtype=float32  label (384, 8)
+[latih] piksel min=0.000 maks=1.000 rerata=0.648
+[latih] NaN citra=0  NaN label=0
+[latih] label min=0 maks=2  total objek/citra: min=1 maks=8
+[val  ] citra (96, 3, 224, 224) dtype=float32  label (96, 8)
+[val  ] piksel min=0.004 maks=0.965 rerata=0.713
+[val  ] NaN citra=0  NaN label=0
+[val  ] label min=0 maks=1  total objek/citra: min=1 maks=3
+data_hash: b83d528dd107253c5709c53f503ad76b  (metrics.json memakai hash dengan parameter split)
+kelas: ['botol', 'gelas', 'kotak pensil', 'kunci', 'spidol', 'gunting', 'ponsel', 'buku']
+rata-rata jumlah per kelas (latih): {'botol': np.float32(0.44), 'gelas': np.float32(0.38), 'kotak pensil': np.float32(0.25), 'kunci': np.float32(0.5), 'spidol': np.float32(0.5), 'gunting': np.float32(0.62), 'ponsel': np.float32(0.5), 'buku': np.float32(0.5)}
+montase disimpan: docs\cek_citra_cnn.png
+366c08fe1dd6031eb728073288512de8
