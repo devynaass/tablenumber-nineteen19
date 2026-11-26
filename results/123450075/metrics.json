@@ -1,0 +1,17 @@
+{
+  "metrik": {
+    "val_rmse": 0.401871,
+    "val_mae": 0.301793,
+    "val_r2": 0.054992,
+    "test_rmse": 0.633472,
+    "test_mae": 0.491052,
+    "test_r2": -0.073357
+  },
+  "seed": 1,
+  "data_hash": "366c08fe1dd6031eb728073288512de8",
+  "perangkat": "cpu",
+  "model": "transfer_learning_resnet18",
+  "n_val": 96,
+  "n_test": 241,
+  "durasi_detik": 597.71
+}

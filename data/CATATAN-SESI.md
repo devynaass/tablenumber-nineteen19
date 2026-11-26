@@ -5,7 +5,7 @@
 | Butir | Isi |
 |---|---|
 | Tanggal slot | Senin, 16 November 2026, 16.00–17.00 |
-| Folder sesi | `data/tim19/sesi-20261116-165743/` |
+| Folder sesi | `data/raw/sesi-20261116-165743/` |
 | Rencana | `rencana/t19-objek-meja.yaml` (seed 1019) |
 | SHA-256 `label.csv` | lihat `data/MANIFEST.json` |
 
@@ -22,9 +22,9 @@
 | Butir | Rencana | Yang ditata saat sesi |
 |---|---|---|
 | Daftar objek | 2 ponsel, buku | 1 ponsel, 1 buku |
-| Vektor label | `[1, 0, 2, 0, 0, 0, 0, 0]` | `[1, 0, 1, 0, 0, 0, 0, 0]` |
+| Vektor label | `[0, 0, 0, 0, 0, 0, 2, 1]` | `[0, 0, 0, 0, 0, 0, 1, 1]` |
 
-Urutan kelas pada vektor: buku, botol, ponsel, gunting, spidol, gelas, kotak pensil, kunci.
+Urutan kelas pada vektor mengikuti `KELAS_OBJEK` di `src/protokol/data.py`: botol, gelas, kotak pensil, kunci, spidol, gunting, ponsel, buku.
 
 - **Kondisi terdampak:** keempat kondisi pada blok S27 (2 taraf lampu × 2 ulangan), yaitu semua baris `label.csv` dengan susunan S27.
 - **Selisih:** kurang 1 ponsel. Kelas lain sesuai rencana.
@@ -37,17 +37,12 @@ Urutan kelas pada vektor: buku, botol, ponsel, gunting, spidol, gelas, kotak pen
 **Usulan:** label S27 dikoreksi sesuai isi yang benar-benar ditata (1 buku, 1 ponsel). Data tidak dibuang karena jumlah susunan hanya 30.
 
 - `label.csv` asli tidak diubah, sehingga sidik SHA-256 di `data/MANIFEST.json` tetap berlaku.
-- Koreksi diterapkan di pemotong jendela melalui berkas `data/koreksi_label.csv`:
-
-  ```csv
-  susunan,kelas,jumlah_rencana,jumlah_sebenarnya
-  S27,ponsel,2,1
-  ```
+- Koreksi diterapkan di `src/protokol/data.py` melalui `KOREKSI_LABEL = {"S27": {"ponsel": 1.0}}`. Koreksi ditaruh di kode (bukan di `data/`) karena folder `data/` tidak di-commit, sehingga koreksi ini sama di laptop semua anggota.
 
 - Pembagian lipatan tidak berubah; S27 tetap menjadi satu grup.
 - Deviasi ini disebutkan dalam laporan.
 
-**Alternatif** bila pembimbing tidak menyetujui koreksi: keempat kondisi S27 dikeluarkan, sehingga tersisa 29 susunan (satu lipatan berisi 9 susunan).
+**Alternatif** bila pembimbing tidak menyetujui koreksi: keempat kondisi S27 dikeluarkan dengan `SUSUNAN_DIBUANG = {"S27"}` dan entri S27 dihapus dari `KOREKSI_LABEL`, sehingga tersisa 29 susunan (satu lipatan berisi 9 susunan).
 
 **Status:** menunggu persetujuan pembimbing (tanggal: `[isi]`).
 
@@ -57,4 +52,4 @@ Urutan kelas pada vektor: buku, botol, ponsel, gunting, spidol, gelas, kotak pen
 |---|---|
 | Belum ada | |
 
-Gangguan lain yang tercatat di lembar sesi: tidak ada
+Gangguan lain yang tercatat di lembar sesi: `[isi, atau tulis "tidak ada"]`.
