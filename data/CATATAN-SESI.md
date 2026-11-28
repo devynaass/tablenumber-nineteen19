@@ -7,7 +7,7 @@
 | Tanggal slot | Senin, 16 November 2026, 16.00–17.00 |
 | Folder sesi | `data/raw/sesi-20261116-165743/` |
 | Rencana | `rencana/t19-objek-meja.yaml` (seed 1019) |
-| SHA-256 `label.csv` / `data_hash` | `b83d528dd107253c5709c53f503ad76b` (lihat `data/MANIFEST.json`) |
+| SHA-256 `label.csv` / `data_hash` | `366c08fe1dd6031eb728073288512de8` (lihat `data/MANIFEST.json`) |
 
 ## 2. Pemeriksaan Mutu
 
@@ -66,12 +66,12 @@ Pemeriksaan visual dilakukan terhadap sampel acak kondisi dari `label.csv` denga
 | `S27` | `S27` (rencana `2 ponsel` -> aktual `1 ponsel`) | `0` & `255` | Seluruh frame blok `S27` | Terverifikasi `1 ponsel` & `1 buku` pada citra; koreksi diterapkan |
 
 ### B. Ringkasan Kecocokan `data_hash` Seluruh Anggota Tim
-- **Nilai `data_hash` Acuan (`data/MANIFEST.json`):** `b83d528dd107253c5709c53f503ad76b`
+- **Nilai `data_hash` Acuan (`data/MANIFEST.json`):** `366c08fe1dd6031eb728073288512de8`
 
 | NIM | Nama Anggota | `data_hash` Terpakai | Status |
 | :---: | :--- | :---: | :---: |
-| `123450007` | Juesia Pridelia Saragih | `b83d528dd107253c5709c53f503ad76b` | Cocok |
-| `123450064` | Muhammad Hanif Dzaky | `b83d528dd107253c5709c53f503ad76b` | Cocok |
-| `123450075` | Aliyammara | `b83d528dd107253c5709c53f503ad76b` | Cocok |
-| `123450085` | Devyna Sonya Palupi Sanjaya | `b83d528dd107253c5709c53f503ad76b` | Cocok |
-| `123450090` | Malika Azzahra Salsabila | `b83d528dd107253c5709c53f503ad76b` | Cocok |
+| `123450007` | Juesia Pridelia Saragih | `366c08fe1dd6031eb728073288512de8` | Cocok |
+| `123450064` | Muhammad Hanif Dzaky | `366c08fe1dd6031eb728073288512de8` | Cocok |
+| `123450075` | Aliyammara | `366c08fe1dd6031eb728073288512de8` | Cocok |
+| `123450085` | Devyna Sonya Palupi Sanjaya | `366c08fe1dd6031eb728073288512de8` | Cocok |
+| `123450090` | Malika Azzahra Salsabila | `366c08fe1dd6031eb728073288512de8` | Cocok |
