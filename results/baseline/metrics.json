@@ -1,8 +1,8 @@
 {
   "metrik": {
-    "val_rmse": 0.408669,
-    "val_mae": 0.320898,
-    "val_r2": 0.022751
+    "val_rmse": 0.410095,
+    "val_mae": 0.294404,
+    "val_r2": 0.015921
   },
   "seed": 1,
   "data_hash": "366c08fe1dd6031eb728073288512de8",
@@ -10,5 +10,5 @@
   "model": "baseline",
   "n_val": 96,
   "n_test": 0,
-  "durasi_detik": 1.5
+  "durasi_detik": 2.7
 }

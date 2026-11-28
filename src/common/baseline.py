@@ -49,11 +49,11 @@ def logistik(Xtr, ytr, Xva, seed: int, epoch: int = 5, lr: float = 0.1, batch: i
 
 def ridge(Xtr, ytr, Xva, lam: float = 1.0) -> np.ndarray:
     Xb = np.hstack([Xtr, np.ones((len(Xtr), 1), np.float32)])
-    A = Xb.T @ Xb + lam * np.eye(Xb.shape[1], dtype=np.float32)
-    w = np.linalg.solve(A, Xb.T @ ytr.astype(np.float32))
+    K = Xb @ Xb.T + lam * np.eye(len(Xb), dtype=np.float32)
+    alpha = np.linalg.solve(K, ytr.astype(np.float32))
+    w = Xb.T @ alpha
     return np.hstack([Xva, np.ones((len(Xva), 1), np.float32)]) @ w
-
-
+    
 def main() -> None:
     from src.protokol import data
 
