@@ -1,0 +1,371 @@
+$ C:\Program Files\Python312\python.exe -m src.common.baseline --seed 1
+{"val_rmse": 0.410095, "val_mae": 0.294404, "val_r2": 0.015921} → results\baseline\metrics.json
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 1
+[cnn] latih (384, 3, 224, 224), val (96, 3, 224, 224), perangkat cpu
+[bentuk] masukan model: (4, 3, 224, 224)  (N, kanal, tinggi, lebar)
+[bentuk] label        : (4, 8)  (N, jumlah per kelas)
+[bentuk] keluaran     : (4, 8)  (N, jumlah per kelas)
+epoch   1  loss 0.5702  val_mae 0.4017  (10 s)
+epoch   2  loss 0.4444  val_mae 0.2655  (20 s)
+epoch   3  loss 0.3629  val_mae 0.2326  (30 s)
+epoch   4  loss 0.3229  val_mae 0.2498  (40 s)
+epoch   5  loss 0.3029  val_mae 0.2726  (50 s)
+epoch   6  loss 0.2959  val_mae 0.2436  (60 s)
+epoch   7  loss 0.2780  val_mae 0.2657  (70 s)
+epoch   8  loss 0.2611  val_mae 0.2600  (81 s)
+epoch   9  loss 0.2602  val_mae 0.2445  (91 s)
+epoch  10  loss 0.2353  val_mae 0.2503  (101 s)
+epoch  11  loss 0.2323  val_mae 0.2783  (111 s)
+epoch  12  loss 0.2133  val_mae 0.2859  (122 s)
+epoch  13  loss 0.2088  val_mae 0.2918  (132 s)
+epoch  14  loss 0.1999  val_mae 0.2615  (143 s)
+epoch  15  loss 0.1986  val_mae 0.3388  (153 s)
+epoch  16  loss 0.1875  val_mae 0.2657  (163 s)
+epoch  17  loss 0.1733  val_mae 0.2736  (174 s)
+epoch  18  loss 0.1787  val_mae 0.2382  (184 s)
+[cnn] berhenti dini: 15 epoch tanpa perbaikan
+{"val_rmse": 0.429322, "val_mae": 0.232572, "val_r2": -0.078522} → results\123450007\metrics.json
+
+MAE validasi per kelas:
+  botol         0.0711
+  gelas         0.0105
+  kotak pensil  0.2584
+  kunci         0.4788
+  spidol        0.2586
+  gunting       0.2611
+  ponsel        0.2726
+  buku          0.2495
+ketepatan susunan (val): 0.0000   epoch terbaik: 3
+
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 2
+[cnn] latih (384, 3, 224, 224), val (96, 3, 224, 224), perangkat cpu
+[bentuk] masukan model: (4, 3, 224, 224)  (N, kanal, tinggi, lebar)
+[bentuk] label        : (4, 8)  (N, jumlah per kelas)
+[bentuk] keluaran     : (4, 8)  (N, jumlah per kelas)
+epoch   1  loss 0.5676  val_mae 0.4813  (11 s)
+epoch   2  loss 0.4610  val_mae 0.3477  (21 s)
+epoch   3  loss 0.3865  val_mae 0.2999  (31 s)
+epoch   4  loss 0.3354  val_mae 0.2624  (42 s)
+epoch   5  loss 0.3094  val_mae 0.2696  (52 s)
+epoch   6  loss 0.2955  val_mae 0.2715  (63 s)
+epoch   7  loss 0.2735  val_mae 0.3131  (73 s)
+epoch   8  loss 0.2632  val_mae 0.2977  (83 s)
+epoch   9  loss 0.2571  val_mae 0.2596  (94 s)
+epoch  10  loss 0.2330  val_mae 0.2686  (104 s)
+epoch  11  loss 0.2366  val_mae 0.2450  (115 s)
+epoch  12  loss 0.2176  val_mae 0.2825  (126 s)
+epoch  13  loss 0.2115  val_mae 0.2807  (136 s)
+epoch  14  loss 0.2000  val_mae 0.2868  (147 s)
+epoch  15  loss 0.2104  val_mae 0.2731  (158 s)
+epoch  16  loss 0.1882  val_mae 0.2404  (169 s)
+epoch  17  loss 0.1926  val_mae 0.2600  (180 s)
+epoch  18  loss 0.1859  val_mae 0.2688  (190 s)
+epoch  19  loss 0.1875  val_mae 0.2552  (201 s)
+epoch  20  loss 0.1738  val_mae 0.2544  (211 s)
+epoch  21  loss 0.1656  val_mae 0.2496  (222 s)
+epoch  22  loss 0.1537  val_mae 0.2604  (232 s)
+epoch  23  loss 0.1574  val_mae 0.2581  (242 s)
+epoch  24  loss 0.1493  val_mae 0.2579  (253 s)
+epoch  25  loss 0.1437  val_mae 0.2389  (264 s)
+epoch  26  loss 0.1440  val_mae 0.2634  (275 s)
+epoch  27  loss 0.1488  val_mae 0.2442  (286 s)
+epoch  28  loss 0.1417  val_mae 0.2434  (296 s)
+epoch  29  loss 0.1433  val_mae 0.2600  (307 s)
+epoch  30  loss 0.1395  val_mae 0.2524  (318 s)
+epoch  31  loss 0.1397  val_mae 0.2549  (328 s)
+epoch  32  loss 0.1353  val_mae 0.2484  (339 s)
+epoch  33  loss 0.1365  val_mae 0.2508  (349 s)
+epoch  34  loss 0.1344  val_mae 0.2478  (360 s)
+epoch  35  loss 0.1300  val_mae 0.2529  (370 s)
+epoch  36  loss 0.1291  val_mae 0.2518  (381 s)
+epoch  37  loss 0.1398  val_mae 0.2474  (391 s)
+epoch  38  loss 0.1291  val_mae 0.2474  (402 s)
+epoch  39  loss 0.1335  val_mae 0.2460  (413 s)
+epoch  40  loss 0.1293  val_mae 0.2477  (423 s)
+[cnn] berhenti dini: 15 epoch tanpa perbaikan
+{"val_rmse": 0.433857, "val_mae": 0.238887, "val_r2": -0.101426} → results\123450007\metrics.json
+
+MAE validasi per kelas:
+  botol         0.1781
+  gelas         0.0117
+  kotak pensil  0.2655
+  kunci         0.5723
+  spidol        0.3027
+  gunting       0.2699
+  ponsel        0.0872
+  buku          0.2236
+ketepatan susunan (val): 0.0000   epoch terbaik: 25
+
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 3
+[cnn] latih (384, 3, 224, 224), val (96, 3, 224, 224), perangkat cpu
+[bentuk] masukan model: (4, 3, 224, 224)  (N, kanal, tinggi, lebar)
+[bentuk] label        : (4, 8)  (N, jumlah per kelas)
+[bentuk] keluaran     : (4, 8)  (N, jumlah per kelas)
+epoch   1  loss 0.5669  val_mae 0.3868  (11 s)
+epoch   2  loss 0.4502  val_mae 0.2571  (21 s)
+epoch   3  loss 0.3842  val_mae 0.2602  (32 s)
+epoch   4  loss 0.3440  val_mae 0.2649  (42 s)
+epoch   5  loss 0.3165  val_mae 0.3114  (53 s)
+epoch   6  loss 0.2988  val_mae 0.2682  (64 s)
+epoch   7  loss 0.2911  val_mae 0.2469  (74 s)
+epoch   8  loss 0.2690  val_mae 0.2828  (85 s)
+epoch   9  loss 0.2485  val_mae 0.2784  (96 s)
+epoch  10  loss 0.2362  val_mae 0.2599  (106 s)
+epoch  11  loss 0.2394  val_mae 0.2929  (116 s)
+epoch  12  loss 0.2348  val_mae 0.2660  (127 s)
+epoch  13  loss 0.2047  val_mae 0.2504  (138 s)
+epoch  14  loss 0.1944  val_mae 0.2608  (149 s)
+epoch  15  loss 0.1958  val_mae 0.2649  (160 s)
+epoch  16  loss 0.1725  val_mae 0.2774  (171 s)
+epoch  17  loss 0.1725  val_mae 0.2612  (182 s)
+epoch  18  loss 0.1697  val_mae 0.2705  (193 s)
+epoch  19  loss 0.1647  val_mae 0.2441  (204 s)
+epoch  20  loss 0.1598  val_mae 0.2596  (215 s)
+epoch  21  loss 0.1523  val_mae 0.2526  (225 s)
+epoch  22  loss 0.1493  val_mae 0.2482  (236 s)
+epoch  23  loss 0.1437  val_mae 0.2410  (247 s)
+epoch  24  loss 0.1384  val_mae 0.2515  (257 s)
+epoch  25  loss 0.1341  val_mae 0.2654  (268 s)
+epoch  26  loss 0.1282  val_mae 0.2521  (278 s)
+epoch  27  loss 0.1323  val_mae 0.2625  (289 s)
+epoch  28  loss 0.1392  val_mae 0.2507  (299 s)
+epoch  29  loss 0.1298  val_mae 0.2671  (310 s)
+epoch  30  loss 0.1310  val_mae 0.2421  (320 s)
+epoch  31  loss 0.1272  val_mae 0.2584  (331 s)
+epoch  32  loss 0.1237  val_mae 0.2519  (342 s)
+epoch  33  loss 0.1246  val_mae 0.2543  (352 s)
+epoch  34  loss 0.1175  val_mae 0.2519  (362 s)
+epoch  35  loss 0.1355  val_mae 0.2523  (373 s)
+epoch  36  loss 0.1203  val_mae 0.2510  (384 s)
+epoch  37  loss 0.1269  val_mae 0.2516  (395 s)
+epoch  38  loss 0.1177  val_mae 0.2493  (405 s)
+[cnn] berhenti dini: 15 epoch tanpa perbaikan
+{"val_rmse": 0.443265, "val_mae": 0.241, "val_r2": -0.149711} → results\123450007\metrics.json
+
+MAE validasi per kelas:
+  botol         0.1744
+  gelas         0.0053
+  kotak pensil  0.2528
+  kunci         0.5776
+  spidol        0.3194
+  gunting       0.2648
+  ponsel        0.0796
+  buku          0.2541
+ketepatan susunan (val): 0.0000   epoch terbaik: 23
+
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 1
+{"val_rmse": 0.477275, "val_mae": 0.412023, "val_r2": -0.332904} → results\123450064\metrics.json
+Memuat dataset...
+Train: (384, 3, 224, 224) (384, 8)
+Validasi: (96, 3, 224, 224) (96, 8)
+Epoch 1/2 - Train Loss: 0.570100
+Epoch 2/2 - Train Loss: 0.339960
+
+Menjalankan evaluator resmi...
+
+Training selesai.
+Durasi: 7.71 detik
+MAE per kelas: {'botol': 0.501377284526825, 'gelas': 0.1489115208387375, 'kotak pensil': 0.41288280487060547, 'kunci': 0.5124401450157166, 'spidol': 0.5211672186851501, 'gunting': 0.4355473220348358, 'ponsel': 0.4086073935031891, 'buku': 0.35525062680244446}
+Exact match: 0.0
+Hasil: <PATH_LOKAL>
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 2
+{"val_rmse": 0.499902, "val_mae": 0.431698, "val_r2": -0.462285} → results\123450064\metrics.json
+Memuat dataset...
+Train: (384, 3, 224, 224) (384, 8)
+Validasi: (96, 3, 224, 224) (96, 8)
+Epoch 1/2 - Train Loss: 0.475991
+Epoch 2/2 - Train Loss: 0.352967
+
+Menjalankan evaluator resmi...
+
+Training selesai.
+Durasi: 8.02 detik
+MAE per kelas: {'botol': 0.6047152876853943, 'gelas': 0.18794871866703033, 'kotak pensil': 0.4510047137737274, 'kunci': 0.48995670676231384, 'spidol': 0.5571374893188477, 'gunting': 0.48087194561958313, 'ponsel': 0.3147983253002167, 'buku': 0.3671484887599945}
+Exact match: 0.0
+Hasil: <PATH_LOKAL>
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 3
+{"val_rmse": 0.501364, "val_mae": 0.439087, "val_r2": -0.470847} → results\123450064\metrics.json
+Memuat dataset...
+Train: (384, 3, 224, 224) (384, 8)
+Validasi: (96, 3, 224, 224) (96, 8)
+Epoch 1/2 - Train Loss: 0.549692
+Epoch 2/2 - Train Loss: 0.375589
+
+Menjalankan evaluator resmi...
+
+Training selesai.
+Durasi: 7.57 detik
+MAE per kelas: {'botol': 0.6466233730316162, 'gelas': 0.21255718171596527, 'kotak pensil': 0.2790461480617523, 'kunci': 0.4838881492614746, 'spidol': 0.5083302855491638, 'gunting': 0.49235451221466064, 'ponsel': 0.49173298478126526, 'buku': 0.3981594145298004}
+Exact match: 0.0
+Hasil: <PATH_LOKAL>
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 1
+0.3%0.6%0.8%1.1%1.4%1.7%2.0%2.2%2.5%2.8%3.1%3.4%3.6%3.9%4.2%4.5%4.8%5.0%5.3%5.6%5.9%6.2%6.4%6.7%7.0%7.3%7.6%7.8%8.1%8.4%8.7%9.0%9.2%9.5%9.8%10.1%10.4%10.6%10.9%11.2%11.5%11.8%12.0%12.3%12.6%12.9%13.2%13.4%13.7%14.0%14.3%14.6%14.8%15.1%15.4%15.7%16.0%16.2%16.5%16.8%17.1%17.4%17.6%17.9%18.2%18.5%18.8%19.0%19.3%19.6%19.9%20.2%20.4%20.7%21.0%21.3%21.6%21.8%22.1%22.4%22.7%23.0%23.2%23.5%23.8%24.1%24.4%24.6%24.9%25.2%25.5%25.7%26.0%26.3%26.6%26.9%27.1%27.4%27.7%28.0%28.3%28.5%28.8%29.1%29.4%29.7%29.9%30.2%30.5%30.8%31.1%31.3%31.6%31.9%32.2%32.5%32.7%33.0%33.3%33.6%33.9%34.1%34.4%34.7%35.0%35.3%35.5%35.8%36.1%36.4%36.7%36.9%37.2%37.5%37.8%38.1%38.3%38.6%38.9%39.2%39.5%39.7%40.0%40.3%40.6%40.9%41.1%41.4%41.7%42.0%42.3%42.5%42.8%43.1%43.4%43.7%43.9%44.2%44.5%44.8%45.1%45.3%45.6%45.9%46.2%46.5%46.7%47.0%47.3%47.6%47.9%48.1%48.4%48.7%49.0%49.3%49.5%49.8%50.1%50.4%50.7%50.9%51.2%51.5%51.8%52.1%52.3%52.6%52.9%53.2%53.5%53.7%54.0%54.3%54.6%54.9%55.1%55.4%55.7%56.0%56.3%56.5%56.8%57.1%57.4%57.7%57.9%58.2%58.5%58.8%59.1%59.3%59.6%59.9%60.2%60.5%60.7%61.0%61.3%61.6%61.9%62.1%62.4%62.7%63.0%63.3%63.5%63.8%64.1%64.4%64.7%64.9%65.2%65.5%65.8%66.1%66.3%66.6%66.9%67.2%67.5%67.7%68.0%68.3%68.6%68.9%69.1%69.4%69.7%70.0%70.3%70.5%70.8%71.1%71.4%71.7%71.9%72.2%72.5%72.8%73.1%73.3%73.6%73.9%74.2%74.4%74.7%75.0%75.3%75.6%75.8%76.1%76.4%76.7%77.0%77.2%77.5%77.8%78.1%78.4%78.6%78.9%79.2%79.5%79.8%80.0%80.3%80.6%80.9%81.2%81.4%81.7%82.0%82.3%82.6%82.8%83.1%83.4%83.7%84.0%84.2%84.5%84.8%85.1%85.4%85.6%85.9%86.2%86.5%86.8%87.0%87.3%87.6%87.9%88.2%88.4%88.7%89.0%89.3%89.6%89.8%90.1%90.4%90.7%91.0%91.2%91.5%91.8%92.1%92.4%92.6%92.9%93.2%93.5%93.8%94.0%94.3%94.6%94.9%95.2%95.4%95.7%96.0%96.3%96.6%96.8%97.1%97.4%97.7%98.0%98.2%98.5%98.8%99.1%99.4%99.6%99.9%100.0%
+{"val_rmse": 0.401871, "val_mae": 0.301793, "val_r2": 0.054992, "test_rmse": 0.633472, "test_mae": 0.491052, "test_r2": -0.073357} → results\123450075\metrics.json
+=== [TL ResNet18] Melatih pada Data Primer (Seed: 1) ===
+[1/4] Memuat data primer dari src.protokol.data...
+-> Train: (384, 3, 224, 224), Val: (96, 3, 224, 224)
+[2/4] Melatih model ResNet18 selama 20 epoch di perangkat: cpu...
+Downloading: "https://download.pytorch.org/models/resnet18-f37072fd.pth" to <PATH_LOKAL>
+   Epoch 01/20 | Val MAE: 0.3018 (Terbaik: 0.3018)
+   Epoch 05/20 | Val MAE: 0.3299 (Terbaik: 0.3018)
+   Epoch 10/20 | Val MAE: 0.3835 (Terbaik: 0.3018)
+   Epoch 15/20 | Val MAE: 0.4666 (Terbaik: 0.3018)
+   Epoch 20/20 | Val MAE: 0.4852 (Terbaik: 0.3018)
+[3/4] Menghitung metrik resmi dan menulis results/123450075/metrics.json...
+[4/4] BERHASIL! Tugas #14 selesai dan results/123450075/metrics.json valid!
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 2
+{"val_rmse": 0.3784, "val_mae": 0.282602, "val_r2": 0.162155, "test_rmse": 0.597419, "test_mae": 0.482085, "test_r2": 0.045344} → results\123450075\metrics.json
+=== [TL ResNet18] Melatih pada Data Primer (Seed: 2) ===
+[1/4] Memuat data primer dari src.protokol.data...
+-> Train: (384, 3, 224, 224), Val: (96, 3, 224, 224)
+[2/4] Melatih model ResNet18 selama 20 epoch di perangkat: cpu...
+   Epoch 01/20 | Val MAE: 0.2864 (Terbaik: 0.2864)
+   Epoch 05/20 | Val MAE: 0.3085 (Terbaik: 0.2826)
+   Epoch 10/20 | Val MAE: 0.4025 (Terbaik: 0.2826)
+   Epoch 15/20 | Val MAE: 0.4336 (Terbaik: 0.2826)
+   Epoch 20/20 | Val MAE: 0.3664 (Terbaik: 0.2826)
+[3/4] Menghitung metrik resmi dan menulis results/123450075/metrics.json...
+[4/4] BERHASIL! Tugas #14 selesai dan results/123450075/metrics.json valid!
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 3
+{"val_rmse": 0.365875, "val_mae": 0.266187, "val_r2": 0.216701, "test_rmse": 0.597726, "test_mae": 0.493677, "test_r2": 0.04436} → results\123450075\metrics.json
+=== [TL ResNet18] Melatih pada Data Primer (Seed: 3) ===
+[1/4] Memuat data primer dari src.protokol.data...
+-> Train: (384, 3, 224, 224), Val: (96, 3, 224, 224)
+[2/4] Melatih model ResNet18 selama 20 epoch di perangkat: cpu...
+   Epoch 01/20 | Val MAE: 0.2726 (Terbaik: 0.2726)
+   Epoch 05/20 | Val MAE: 0.3238 (Terbaik: 0.2662)
+   Epoch 10/20 | Val MAE: 0.4096 (Terbaik: 0.2662)
+   Epoch 15/20 | Val MAE: 0.4843 (Terbaik: 0.2662)
+   Epoch 20/20 | Val MAE: 0.4417 (Terbaik: 0.2662)
+[3/4] Menghitung metrik resmi dan menulis results/123450075/metrics.json...
+[4/4] BERHASIL! Tugas #14 selesai dan results/123450075/metrics.json valid!
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 1
+{"val_rmse": 0.661386, "val_mae": 0.514611, "val_r2": -1.559596} → results\123450085\metrics.json
+============================================================
+   CNN-LSTM (JALUR RNN) – Sprint 1 – Seed 1
+============================================================
+[1/4] Memuat data via src.protokol.data.muat() ...
+   Train : X=(384, 3, 224, 224)  y=(384, 8)
+   Val   : X=(96, 3, 224, 224)  y=(96, 8)
+
+[2/4] Melatih pada cpu  (5 epoch, batch 8) ...
+   Epoch [1/5]  MSE-Loss: 0.3905
+   Epoch [2/5]  MSE-Loss: 0.2959
+   Epoch [3/5]  MSE-Loss: 0.2392
+   Epoch [4/5]  MSE-Loss: 0.1711
+   Epoch [5/5]  MSE-Loss: 0.1247
+   Selesai dalam 45.9 detik.
+[3/4] Inferensi data validasi ...
+[4/4] Simpan prediksi & panggil src.common.evaluate ...
+
+============================================================
+SUKSES! Cek results/123450085/metrics.json
+============================================================
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 2
+{"val_rmse": 0.457269, "val_mae": 0.302667, "val_r2": -0.223506} → results\123450085\metrics.json
+============================================================
+   CNN-LSTM (JALUR RNN) – Sprint 1 – Seed 2
+============================================================
+[1/4] Memuat data via src.protokol.data.muat() ...
+   Train : X=(384, 3, 224, 224)  y=(384, 8)
+   Val   : X=(96, 3, 224, 224)  y=(96, 8)
+
+[2/4] Melatih pada cpu  (5 epoch, batch 8) ...
+   Epoch [1/5]  MSE-Loss: 0.3820
+   Epoch [2/5]  MSE-Loss: 0.2550
+   Epoch [3/5]  MSE-Loss: 0.2148
+   Epoch [4/5]  MSE-Loss: 0.1622
+   Epoch [5/5]  MSE-Loss: 0.1139
+   Selesai dalam 46.0 detik.
+[3/4] Inferensi data validasi ...
+[4/4] Simpan prediksi & panggil src.common.evaluate ...
+
+============================================================
+SUKSES! Cek results/123450085/metrics.json
+============================================================
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 3
+{"val_rmse": 0.650456, "val_mae": 0.517688, "val_r2": -1.4757} → results\123450085\metrics.json
+============================================================
+   CNN-LSTM (JALUR RNN) – Sprint 1 – Seed 3
+============================================================
+[1/4] Memuat data via src.protokol.data.muat() ...
+   Train : X=(384, 3, 224, 224)  y=(384, 8)
+   Val   : X=(96, 3, 224, 224)  y=(96, 8)
+
+[2/4] Melatih pada cpu  (5 epoch, batch 8) ...
+   Epoch [1/5]  MSE-Loss: 0.3713
+   Epoch [2/5]  MSE-Loss: 0.2916
+   Epoch [3/5]  MSE-Loss: 0.2213
+   Epoch [4/5]  MSE-Loss: 0.1617
+   Epoch [5/5]  MSE-Loss: 0.1104
+   Selesai dalam 45.9 detik.
+[3/4] Inferensi data validasi ...
+[4/4] Simpan prediksi & panggil src.common.evaluate ...
+
+============================================================
+SUKSES! Cek results/123450085/metrics.json
+============================================================
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 1
+{"val_rmse": 0.866614, "val_mae": 0.632665, "val_r2": -3.394536} → results\123450090\metrics.json
+=======================================================
+AUTOENCODER - 123450090
+=======================================================
+Epoch 1/10 - Loss: 0.230938
+Epoch 2/10 - Loss: 0.154094
+Epoch 3/10 - Loss: 0.135195
+Epoch 4/10 - Loss: 0.119788
+Epoch 5/10 - Loss: 0.110909
+Epoch 6/10 - Loss: 0.092369
+Epoch 7/10 - Loss: 0.089221
+Epoch 8/10 - Loss: 0.073638
+Epoch 9/10 - Loss: 0.069467
+Epoch 10/10 - Loss: 0.058812
+Prediksi validasi disimpan: <PATH_LOKAL>
+=======================================================
+PROSES SELESAI
+Durasi: 110.85 detik
+Hasil: <PATH_LOKAL>
+=======================================================
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 2
+{"val_rmse": 0.677043, "val_mae": 0.480934, "val_r2": -1.682224} → results\123450090\metrics.json
+=======================================================
+AUTOENCODER - 123450090
+=======================================================
+Epoch 1/10 - Loss: 0.236935
+Epoch 2/10 - Loss: 0.153942
+Epoch 3/10 - Loss: 0.128005
+Epoch 4/10 - Loss: 0.112675
+Epoch 5/10 - Loss: 0.097538
+Epoch 6/10 - Loss: 0.079480
+Epoch 7/10 - Loss: 0.071330
+Epoch 8/10 - Loss: 0.057090
+Epoch 9/10 - Loss: 0.046968
+Epoch 10/10 - Loss: 0.036694
+Prediksi validasi disimpan: <PATH_LOKAL>
+=======================================================
+PROSES SELESAI
+Durasi: 113.62 detik
+Hasil: <PATH_LOKAL>
+=======================================================
+$ C:\Program Files\Python312\python.exe <PATH_LOKAL> --seed 3
+{"val_rmse": 0.985819, "val_mae": 0.650894, "val_r2": -4.686643} → results\123450090\metrics.json
+=======================================================
+AUTOENCODER - 123450090
+=======================================================
+Epoch 1/10 - Loss: 0.232523
+Epoch 2/10 - Loss: 0.156582
+Epoch 3/10 - Loss: 0.134024
+Epoch 4/10 - Loss: 0.124427
+Epoch 5/10 - Loss: 0.104748
+Epoch 6/10 - Loss: 0.089421
+Epoch 7/10 - Loss: 0.086371
+Epoch 8/10 - Loss: 0.080240
+Epoch 9/10 - Loss: 0.061549
+Epoch 10/10 - Loss: 0.048630
+Prediksi validasi disimpan: <PATH_LOKAL>
+=======================================================
+PROSES SELESAI
+Durasi: 111.02 detik
+Hasil: <PATH_LOKAL>
+=======================================================
+Tabel komparasi → reports\hasil_komparasi.md
